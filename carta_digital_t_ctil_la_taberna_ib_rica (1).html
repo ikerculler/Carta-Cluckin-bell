@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>La Taberna Ibérica — Carta Digital Táctil</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Tipografía editorial clásica + UI limpia -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome para iconografía -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-cream: #faf7f2;
+            --bg-card: #fffdf9;
+            --accent-burgundy: #7c1d27;
+            --accent-burgundy-dark: #5e131b;
+            --accent-gold: #b88b3a;
+            --text-ink: #241b16;
+            --text-muted: #5e4f44;
+            --border-soft: #e6dcc8;
+        }
+
+        /* Ocultar scrollbar en pestañas horizontales conservando desplazamiento táctil */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .font-serif-display {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        .font-serif-editorial {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+        }
+
+        .font-ui {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        /* Respuesta táctil inmediata en botones y controles */
+        .touch-btn {
+            touch-action: manipulation;
+            transition: transform 0.1s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .touch-btn:active {
+            transform: scale(0.96);
+        }
+    </style>
+</head>
+<body class="bg-[#faf7f2] text-[#241b16] font-serif-editorial antialiased select-none pb-28">
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="max-w-5xl mx-auto min-h-screen">
+
+        <!-- CABECERA DEL RESTAURANTE -->
+        <header class="px-5 sm:px-8 pt-9 pb-7 text-center border-b border-[#e6dcc8] bg-[#faf7f2]">
+            <p class="font-ui text-[11px] sm:text-xs uppercase tracking-[0.26em] text-[#7c1d27] font-semibold mb-2">
+                Casa Fundada · Tradición y Bodega
+            </p>
+            <h1 class="font-serif-display text-4xl sm:text-6xl font-bold tracking-tight text-[#241b16] mb-2">
+                La Taberna Ibérica
+            </h1>
+            <p class="font-serif-editorial italic text-xl sm:text-2xl text-[#5e4f44] max-w-2xl mx-auto mb-4">
+                Cocina tradicional y producto de nuestra tierra
+            </p>
+            <div class="flex items-center justify-center gap-3">
+                <span class="h-[1px] w-14 bg-[#b88b3a]/70"></span>
+                <span class="w-2 h-2 rotate-45 bg-[#7c1d27]"></span>
+                <span class="h-[1px] w-14 bg-[#b88b3a]/70"></span>
+            </div>
+        </header>
+
+        <!-- NAVEGACIÓN TÁCTIL POR PESTAÑAS -->
+        <nav aria-label="Secciones de la carta" class="sticky top-0 z-30 bg-[#faf7f2]/95 backdrop-blur-md border-b border-[#e6dcc8] px-3 sm:px-6 py-3">
+            <div id="category-tabs" class="flex gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar justify-start sm:justify-center">
+                <!-- Pestañas renderizadas por JavaScript -->
+            </div>
+        </nav>
+
+        <!-- CONTENIDO DE LA CATEGORÍA ACTIVA -->
+        <section class="px-4 sm:px-6 py-7">
+            <div class="flex flex-wrap items-baseline justify-between gap-2 mb-6 pb-3 border-b-2 border-[#b88b3a]/60">
+                <div>
+                    <h2 id="current-category-title" class="font-serif-display text-3xl sm:text-4xl font-bold text-[#7c1d27]">
+                        Entrantes
+                    </h2>
+                </div>
+                <span id="items-count" class="font-ui text-xs uppercase tracking-widest font-semibold text-[#5e4f44]">
+                    4 opciones
+                </span>
+            </div>
+
+            <!-- Contenedor del Menú del Día (activo en la pestaña 'menu-dia') -->
+            <div id="daily-menu-builder" class="hidden mb-8">
+                <!-- Renderizado dinámicamente por JavaScript -->
+            </div>
+
+            <!-- Grid de platos, bebidas y vinos -->
+            <div id="items-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <!-- Elementos renderizados por JavaScript -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- BARRA INFERIOR FIJA DE SELECCIÓN -->
+    <div id="selection-bar" class="fixed bottom-0 left-0 right-0 z-40 px-3 sm:px-5 py-3 bg-[#fffdf9]/95 backdrop-blur-md border-t-2 border-[#b88b3a] shadow-[0_-8px_28px_rgba(36,27,22,0.12)] font-ui">
+        <div class="max-w-5xl mx-auto flex items-center justify-between gap-3 sm:gap-5">
+            <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <div class="w-12 h-12 rounded-xl bg-[#7c1d27] text-[#faf7f2] flex items-center justify-center shrink-0 shadow-sm">
+                    <i class="fa-solid fa-wine-glass-empty text-lg text-[#f3d493]"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-[11px] uppercase tracking-wider font-semibold text-[#5e4f44]">
+                        Selección en mesa · <span id="bar-count" class="text-[#7c1d27] font-bold">0 artículos</span>
+                    </p>
+                    <p id="bar-total" class="font-serif-display text-2xl sm:text-3xl font-bold text-[#241b16] leading-tight">
+                        0,00 €
+                    </p>
+                </div>
+            </div>
+
+            <button type="button" onclick="openSummaryModal()" class="touch-btn shrink-0 bg-[#7c1d27] hover:bg-[#5e131b] text-[#faf7f2] font-semibold px-4 sm:px-6 py-3.5 rounded-xl text-sm sm:text-base flex items-center gap-2.5 border border-[#b88b3a] shadow-md">
+                <i class="fa-solid fa-list-check text-[#f3d493]"></i>
+                <span>Ver Selección</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE DETALLE: INGREDIENTES, ALÉRGENOS Y AÑADIR -->
+    <div id="detail-modal" onclick="if (event.target === this) closeDetailModal()" class="fixed inset-0 z-50 bg-[#241b16]/75 backdrop-blur-sm hidden items-center justify-center p-4 font-ui">
+        <div class="bg-[#fffdf9] text-[#241b16] rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-[#b88b3a]/60">
+            <!-- Cabecera visual -->
+            <div class="relative h-52 sm:h-60 bg-[#efe7d6]">
+                <img id="modal-img" src="" alt="" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/efe7d6/7c1d27?text=La+Taberna+Iberica'">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#241b16]/70 via-transparent to-transparent"></div>
+                <button type="button" onclick="closeDetailModal()" aria-label="Cerrar detalle" class="touch-btn absolute top-4 right-4 w-11 h-11 rounded-full bg-[#241b16]/80 hover:bg-[#7c1d27] text-[#faf7f2] flex items-center justify-center text-lg shadow">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <span id="modal-category-badge" class="absolute bottom-4 left-4 bg-[#b88b3a] text-[#fffdf9] text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow">
+                    Categoría
+                </span>
+            </div>
+
+            <!-- Cuerpo del modal -->
+            <div class="p-5 sm:p-6 max-h-[65vh] overflow-y-auto">
+                <div class="flex items-start justify-between gap-3 mb-2">
+                    <h3 id="modal-title" class="font-serif-display text-2xl sm:text-3xl font-bold text-[#241b16] leading-tight">
+                        Nombre
+                    </h3>
+                    <span id="modal-price" class="font-serif-display text-2xl sm:text-3xl font-bold text-[#7c1d27] whitespace-nowrap">
+                        0,00 €
+                    </span>
+                </div>
+
+                <p id="modal-description" class="font-serif-editorial italic text-xl text-[#5e4f44] leading-snug mb-4">
+                    Descripción breve.
+                </p>
+
+                <!-- Ingredientes -->
+                <div class="mb-4 p-3.5 rounded-2xl bg-[#faf7f2] border border-[#e6dcc8]">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-[#7c1d27] mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-mortar-pestle text-[#b88b3a]"></i>
+                        <span>Ingredientes</span>
+                    </p>
+                    <p id="modal-ingredients" class="text-sm text-[#241b16] leading-relaxed">
+                        Ingredientes del elemento.
+                    </p>
+                </div>
+
+                <!-- Alérgenos -->
+                <div class="mb-6">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-[#5e4f44] mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-info text-[#7c1d27]"></i>
+                        <span>Alérgenos</span>
+                    </p>
+                    <div id="modal-allergens" class="flex flex-wrap gap-2">
+                        <!-- Etiquetas de alérgenos -->
+                    </div>
+                </div>
+
+                <!-- Controles táctiles de cantidad -->
+                <div id="modal-action-area" class="pt-2 border-t border-[#e6dcc8]">
+                    <!-- Renderizado dinámico -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE RESUMEN DE SELECCIÓN -->
+    <div id="summary-modal" onclick="if (event.target === this) closeSummaryModal()" class="fixed inset-0 z-50 bg-[#241b16]/75 backdrop-blur-sm hidden items-center justify-center p-4 font-ui">
+        <div class="bg-[#fffdf9] text-[#241b16] rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-[#b88b3a]/60 flex flex-col max-h-[85vh]">
+            <div class="px-6 py-5 bg-[#faf7f2] border-b border-[#e6dcc8] flex items-center justify-between">
+                <div>
+                    <h3 class="font-serif-display text-2xl sm:text-3xl font-bold text-[#7c1d27]">Resumen de Selección</h3>
+                    <p class="text-xs text-[#5e4f44]">La Taberna Ibérica · Mesa actual</p>
+                </div>
+                <button type="button" onclick="closeSummaryModal()" aria-label="Cerrar resumen" class="touch-btn w-11 h-11 rounded-full bg-[#efe7d6] hover:bg-[#e6dcc8] text-[#241b16] flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="summary-items-list" class="p-5 sm:p-6 overflow-y-auto flex-1 space-y-3">
+                <!-- Artículos seleccionados -->
+            </div>
+
+            <div class="px-6 py-5 bg-[#faf7f2] border-t border-[#e6dcc8]">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm font-semibold uppercase tracking-wider text-[#5e4f44]">Importe total</span>
+                    <span id="summary-total" class="font-serif-display text-3xl font-bold text-[#7c1d27]">0,00 €</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button type="button" onclick="clearSelection()" class="touch-btn py-3.5 px-4 rounded-xl border-2 border-[#7c1d27]/30 hover:border-[#7c1d27] hover:bg-[#7c1d27]/5 text-[#7c1d27] font-bold text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <span>Vaciar selección</span>
+                    </button>
+                    <button type="button" onclick="closeSummaryModal()" class="touch-btn py-3.5 px-4 rounded-xl bg-[#7c1d27] hover:bg-[#5e131b] text-[#faf7f2] font-bold text-sm border border-[#b88b3a] flex items-center justify-center gap-2 shadow">
+                        <i class="fa-solid fa-utensils text-[#f3d493]"></i>
+                        <span>Seguir eligiendo</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =====================================================================
+        // CATEGORÍAS Y CONFIGURACIÓN DEL MENÚ DEL DÍA (20,00 €)
+        // =====================================================================
+        const CATEGORIES = [
+            { id: 'entrantes', name: 'Entrantes', icon: 'fa-plate-wheat' },
+            { id: 'principales', name: 'Principales', icon: 'fa-drumstick-bite' },
+            { id: 'postres', name: 'Postres', icon: 'fa-cake-candles' },
+            { id: 'bebidas', name: 'Bebidas', icon: 'fa-mug-saucer' },
+            { id: 'vinos', name: 'Vinos', icon: 'fa-wine-glass' },
+            { id: 'menu-dia', name: 'Menú del Día', icon: 'fa-crown' }
+        ];
+
+        const DAILY_MENU_PRICE = 20.00;
+
+        // Orden de días según new Date().getDay() (0 = Domingo, 1 = Lunes, ..., 6 = Sábado)
+        const WEEKDAYS_ORDER = [1, 2, 3, 4, 5, 6, 0]; // Lunes a Domingo para vista táctil
+
+        // Cada día tiene Primero, Segundo y Postre fijos y distintos, sin selectores para esos platos
+        const DAILY_MENUS_BY_DAY = {
+            1: {
+                dayName: 'Lunes',
+                primero: { name: 'Tortilla de patata', allergens: ['Huevo'] },
+                segundo: { name: 'Paella valenciana', allergens: [] },
+                postre: { name: 'Arroz con leche', allergens: ['Lácteos'] }
+            },
+            2: {
+                dayName: 'Martes',
+                primero: { name: 'Croquetas caseras', allergens: ['Gluten', 'Lácteos', 'Huevo'] },
+                segundo: { name: 'Fabada asturiana', allergens: ['Sulfitos'] },
+                postre: { name: 'Crema catalana', allergens: ['Huevo', 'Lácteos'] }
+            },
+            3: {
+                dayName: 'Miércoles',
+                primero: { name: 'Patatas bravas', allergens: ['Huevo', 'Gluten (trazas)'] },
+                segundo: { name: 'Cocido madrileño', allergens: ['Gluten', 'Sulfitos'] },
+                postre: { name: 'Natillas con galleta', allergens: ['Lácteos', 'Huevo', 'Gluten'] }
+            },
+            4: {
+                dayName: 'Jueves',
+                primero: { name: 'Jamón ibérico', allergens: ['Gluten (en pan)'] },
+                segundo: { name: 'Secreto ibérico', allergens: [] },
+                postre: { name: 'Ensaimada', allergens: ['Gluten', 'Huevo'] }
+            },
+            5: {
+                dayName: 'Viernes',
+                primero: { name: 'Tortilla de patata', allergens: ['Huevo'] },
+                segundo: { name: 'Pulpo a la gallega', allergens: ['Moluscos'] },
+                postre: { name: 'Churros con chocolate', allergens: ['Gluten', 'Lácteos'] }
+            },
+            6: {
+                dayName: 'Sábado',
+                primero: { name: 'Jamón ibérico', allergens: ['Gluten (en pan)'] },
+                segundo: { name: 'Cochinillo', allergens: [] },
+                postre: { name: 'Crema catalana', allergens: ['Huevo', 'Lácteos'] }
+            },
+            0: {
+                dayName: 'Domingo',
+                primero: { name: 'Croquetas caseras', allergens: ['Gluten', 'Lácteos', 'Huevo'] },
+                segundo: { name: 'Solomillo', allergens: ['Lácteos', 'Sulfitos'] },
+                postre: { name: 'Arroz con leche', allergens: ['Lácteos'] }
+            }
+        };
+
+        // Única elección dentro del menú: la bebida
+        const MENU_DRINK_OPTIONS = [
+            { id: 'md-beb-agua', name: 'Agua mineral', allergens: [] },
+            { id: 'md-beb-refresco', name: 'Refrescos', allergens: [] },
+            { id: 'md-beb-cerveza', name: 'Cerveza de barril', allergens: ['Gluten (cebada)'] },
+            { id: 'md-beb-cafe', name: 'Café / Infusión', allergens: [] },
+            { id: 'md-beb-sangria', name: 'Sangría', allergens: ['Sulfitos'] },
+            { id: 'md-vin-tinto', name: 'Vino tinto de la casa', allergens: ['Sulfitos'] },
+            { id: 'md-vin-blanco', name: 'Vino blanco', allergens: ['Sulfitos'] },
+            { id: 'md-vin-verano', name: 'Tinto de verano', allergens: ['Sulfitos'] }
+        ];
+
+        // =====================================================================
+        // PLATOS, BEBIDAS Y VINOS DE LA CARTA
+        // =====================================================================
+        const MENU_ITEMS = [
+            // --- ENTRANTES ---
+            {
+                id: 'ent-tortilla',
+                category: 'entrantes',
+                name: 'Tortilla de patata',
+                price: 9.50,
+                description: 'Jugosa por dentro y dorada por fuera, cocinada al momento con cebolla pochada.',
+                ingredients: 'Patata agria, huevos camperos, cebolla dulce, aceite de oliva virgen extra y sal.',
+                allergens: ['Huevo'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Tortilla+de+Patata'
+            },
+            {
+                id: 'ent-jamon',
+                category: 'entrantes',
+                name: 'Jamón ibérico',
+                price: 18.00,
+                description: 'Cortado a cuchillo de bellota con curación en bodega natural y pan cristal.',
+                ingredients: 'Jamón ibérico de bellota, pan rústico tostado y tomate rallado opcional.',
+                allergens: ['Gluten (en pan)'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Jamon+Iberico'
+            },
+            {
+                id: 'ent-bravas',
+                category: 'entrantes',
+                name: 'Patatas bravas',
+                price: 7.80,
+                description: 'Dados crujientes de patata acompañados de salsa brava casera con toque ahumado.',
+                ingredients: 'Patata de mesa, pimentón de la Vera, tomate, ajo, aceite de oliva y alioli suave.',
+                allergens: ['Huevo', 'Gluten (trazas)'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Patatas+Bravas'
+            },
+            {
+                id: 'ent-croquetas',
+                category: 'entrantes',
+                name: 'Croquetas caseras',
+                price: 10.20,
+                description: 'Bechamel cremosa de jamón ibérico con rebozado fino y crujiente.',
+                ingredients: 'Leche entera, jamón ibérico, mantequilla, harina de trigo, huevo y pan rallado.',
+                allergens: ['Gluten', 'Lácteos', 'Huevo'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Croquetas+Caseras'
+            },
+
+            // --- PRINCIPALES ---
+            {
+                id: 'pri-paella',
+                category: 'principales',
+                name: 'Paella valenciana',
+                price: 17.50,
+                description: 'Arroz cocinado en paellera tradicional con pollo, conejo, judía verde y garrofón.',
+                ingredients: 'Arroz bomba, pollo de corral, conejo, garrofón, judía verde plana, tomate, azafrán y AOVE.',
+                allergens: ['Sin alérgenos principales declarados'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Paella+Valenciana'
+            },
+            {
+                id: 'pri-cocido',
+                category: 'principales',
+                name: 'Cocido madrileño',
+                price: 18.90,
+                description: 'Vuelco tradicional con sopa de fideos, garbanzos tiernos, carnes y verduras.',
+                ingredients: 'Garbanzos castellanos, morcillo, pollo, chorizo, morcilla, tocino, repollo, zanahoria y fideos.',
+                allergens: ['Gluten', 'Sulfitos (en embutidos)'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Cocido+Madrileno'
+            },
+            {
+                id: 'pri-fabada',
+                category: 'principales',
+                name: 'Fabada asturiana',
+                price: 16.50,
+                description: 'Faba asturiana de manteca cocida a fuego lento con su compango tradicional.',
+                ingredients: 'Faba de Asturias, chorizo asturiano, morcilla ahumada, panceta curada y azafrán.',
+                allergens: ['Sulfitos'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Fabada+Asturiana'
+            },
+            {
+                id: 'pri-pulpo',
+                category: 'principales',
+                name: 'Pulpo a la gallega',
+                price: 19.50,
+                description: 'Pulpo cocido en su punto sobre cachelos, espolvoreado con pimentón y sal gruesa.',
+                ingredients: 'Pulpo, patata gallega, pimentón dulce y picante, aceite de oliva virgen extra y sal en escamas.',
+                allergens: ['Moluscos'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Pulpo+a+la+Gallega'
+            },
+            {
+                id: 'pri-secreto',
+                category: 'principales',
+                name: 'Secreto ibérico',
+                price: 18.50,
+                description: 'Corte jugoso de cerdo ibérico marcado a la parrilla con sal en escamas y guarnición.',
+                ingredients: 'Secreto de cerdo ibérico, aceite de oliva virgen extra, romero fresco y patatas asadas.',
+                allergens: ['Sin alérgenos principales declarados'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Secreto+Iberico'
+            },
+            {
+                id: 'pri-solomillo',
+                category: 'principales',
+                name: 'Solomillo',
+                price: 22.00,
+                description: 'Pieza tierna asada al punto solicitado con reducción de vino tinto y verduras.',
+                ingredients: 'Solomillo de ternera, reducción de tinto crianza, mantequilla y verduritas de temporada.',
+                allergens: ['Lácteos', 'Sulfitos'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Solomillo'
+            },
+            {
+                id: 'pri-cochinillo',
+                category: 'principales',
+                name: 'Cochinillo',
+                price: 23.50,
+                description: 'Asado lento en horno con piel crujiente y carne melosa en su propio jugo.',
+                ingredients: 'Cochinillo asado, agua, sal, aceite de oliva y patatas panadera.',
+                allergens: ['Sin alérgenos principales declarados'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Cochinillo'
+            },
+
+            // --- POSTRES ---
+            {
+                id: 'pos-arroz',
+                category: 'postres',
+                name: 'Arroz con leche',
+                price: 6.20,
+                description: 'Cocido lentamente con piel de limón y canela, acabado con azúcar caramelizado.',
+                ingredients: 'Arroz redondo, leche entera, nata, azúcar, canela en rama y piel de limón.',
+                allergens: ['Lácteos'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Arroz+con+Leche'
+            },
+            {
+                id: 'pos-crema',
+                category: 'postres',
+                name: 'Crema catalana',
+                price: 6.50,
+                description: 'Crema aromatizada con canela y limón coronada con costra crujiente de caramelo.',
+                ingredients: 'Yemas de huevo, leche, azúcar, almidón de maíz, canela y corteza de limón.',
+                allergens: ['Huevo', 'Lácteos'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Crema+Catalana'
+            },
+            {
+                id: 'pos-ensaimada',
+                category: 'postres',
+                name: 'Ensaimada',
+                price: 6.00,
+                description: 'Masa fermentada en espiral, tierna y aromática, espolvoreada con azúcar glas.',
+                ingredients: 'Harina de fuerza, levadura, huevos, azúcar, saïm (manteca de cerdo) y azúcar glas.',
+                allergens: ['Gluten', 'Huevo'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Ensaimada'
+            },
+            {
+                id: 'pos-natillas',
+                category: 'postres',
+                name: 'Natillas con galleta',
+                price: 5.90,
+                description: 'Natillas caseras de vainilla y canela coronadas con galleta dorada crujiente.',
+                ingredients: 'Leche, yemas de huevo, azúcar, vainilla, canela y galleta de mantequilla.',
+                allergens: ['Lácteos', 'Huevo', 'Gluten'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Natillas+con+Galleta'
+            },
+            {
+                id: 'pos-churros',
+                category: 'postres',
+                name: 'Churros con chocolate',
+                price: 6.80,
+                description: 'Churros recién fritos servidos junto a taza de chocolate caliente espeso.',
+                ingredients: 'Harina de trigo, agua, sal, aceite para freír, cacao puro, leche y azúcar.',
+                allergens: ['Gluten', 'Lácteos (en chocolate)'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Churros+con+Chocolate'
+            },
+
+            // --- BEBIDAS ---
+            {
+                id: 'beb-agua',
+                category: 'bebidas',
+                name: 'Agua mineral',
+                price: 2.40,
+                description: 'Botella de agua mineral natural fría, con o sin gas.',
+                ingredients: 'Agua mineral natural de manantial.',
+                allergens: ['Sin alérgenos declarados'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Agua+Mineral'
+            },
+            {
+                id: 'beb-refrescos',
+                category: 'bebidas',
+                name: 'Refrescos',
+                price: 3.00,
+                description: 'Cola, naranja, limón o tónica servido bien frío con hielo y rodaja.',
+                ingredients: 'Agua carbonatada, azúcar o edulcorantes y extractos naturales según variedad.',
+                allergens: ['Sin alérgenos declarados'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Refrescos'
+            },
+            {
+                id: 'beb-cerveza',
+                category: 'bebidas',
+                name: 'Cerveza de barril',
+                price: 3.20,
+                description: 'Caña o doble tirado al momento con espuma cremosa.',
+                ingredients: 'Agua, malta de cebada, lúpulo y levadura.',
+                allergens: ['Gluten (cebada)'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Cerveza+de+Barril'
+            },
+            {
+                id: 'beb-cafe',
+                category: 'bebidas',
+                name: 'Café / Infusión',
+                price: 2.20,
+                description: 'Café recién molido o selección de infusiones naturales de la casa.',
+                ingredients: 'Café arábica tostado o hierbas aromáticas e infusiones naturales.',
+                allergens: ['Sin alérgenos declarados'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Cafe+e+Infusion'
+            },
+            {
+                id: 'beb-sangria',
+                category: 'bebidas',
+                name: 'Sangría',
+                price: 6.50,
+                description: 'Jarra o copa refrescante macerada con fruta fresca de temporada y canela.',
+                ingredients: 'Vino tinto joven, fruta fresca (naranja, manzana, limón), azúcar, toque cítrico y canela.',
+                allergens: ['Sulfitos'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Sangria'
+            },
+
+            // --- VINOS ---
+            {
+                id: 'vin-tinto-casa',
+                category: 'vinos',
+                name: 'Vino tinto de la casa',
+                price: 4.50,
+                description: 'Copa de vino tinto equilibrado con notas de fruta roja y paso amable.',
+                ingredients: 'Uva tinta seleccionada de bodega.',
+                allergens: ['Sulfitos'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Vino+Tinto+de+la+Casa'
+            },
+            {
+                id: 'vin-blanco',
+                category: 'vinos',
+                name: 'Vino blanco',
+                price: 4.00,
+                description: 'Copa de blanco fresco y aromático, ideal para entrantes, mariscos y arroces.',
+                ingredients: 'Uva blanca seleccionada de cosecha fresca.',
+                allergens: ['Sulfitos'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Vino+Blanco'
+            },
+            {
+                id: 'vin-tinto-verano',
+                category: 'vinos',
+                name: 'Tinto de verano',
+                price: 3.80,
+                description: 'Combinación refrescante de vino tinto con gaseosa o limón y abundante hielo.',
+                ingredients: 'Vino tinto de mesa, gaseosa o refresco de limón, hielo y rodaja de limón.',
+                allergens: ['Sulfitos'],
+                image: 'https://placehold.co/600x400/efe7d6/7c1d27?text=Tinto+de+Verano'
+            }
+        ];
+
+        // =====================================================================
+        // ESTADO DE LA APLICACIÓN
+        // =====================================================================
+        const todayDayIndex = new Date().getDay(); // 0 (Dom) a 6 (Sáb)
+        let previewDayIndex = todayDayIndex;     // Día mostrado en Menú del Día (por defecto el actual)
+        let selectedMenuDrink = MENU_DRINK_OPTIONS[0].name; // Única elección dentro del menú: la bebida
+
+        let activeCategory = 'entrantes';
+        // Selección de carta: { [itemId]: quantity }
+        const selection = {};
+        // Menús del día añadidos: [{ uid, signature, dayName, primero, segundo, postre, bebida, price, allergens, qty }]
+        const configuredMenus = [];
+        let currentModalItemId = null;
+
+        // =====================================================================
+        // INICIALIZACIÓN
+        // =====================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderItems();
+            updateSelectionBar();
+        });
+
+        // =====================================================================
+        // PESTAÑAS TÁCTILES
+        // =====================================================================
+        function renderTabs() {
+            const tabsContainer = document.getElementById('category-tabs');
+            tabsContainer.innerHTML = '';
+
+            CATEGORIES.forEach(cat => {
+                const isActive = cat.id === activeCategory;
+                let countInCategory = 0;
+
+                if (cat.id === 'menu-dia') {
+                    countInCategory = configuredMenus.reduce((sum, m) => sum + m.qty, 0);
+                } else {
+                    countInCategory = MENU_ITEMS
+                        .filter(item => item.category === cat.id)
+                        .reduce((sum, item) => sum + (selection[item.id] || 0), 0);
+                }
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectCategory(cat.id);
+                btn.className = [
+                    'touch-btn font-ui flex items-center gap-2.5 px-5 py-3.5 rounded-2xl text-sm sm:text-base font-semibold whitespace-nowrap border',
+                    isActive
+                        ? 'bg-[#7c1d27] text-[#faf7f2] border-[#b88b3a] shadow-md'
+                        : 'bg-[#fffdf9] text-[#241b16] border-[#e6dcc8] hover:border-[#b88b3a]'
+                ].join(' ');
+
+                btn.innerHTML = `
+                    <i class="fa-solid ${cat.icon} ${isActive ? 'text-[#f3d493]' : 'text-[#7c1d27]'}"></i>
+                    <span>${cat.name}</span>
+                    ${countInCategory > 0
+                        ? `<span class="ml-0.5 px-2 py-0.5 text-xs font-bold rounded-full ${isActive ? 'bg-[#b88b3a] text-[#fffdf9]' : 'bg-[#7c1d27]/10 text-[#7c1d27]'}">${countInCategory}</span>`
+                        : ''
+                    }
+                `;
+
+                tabsContainer.appendChild(btn);
+            });
+        }
+
+        function selectCategory(categoryId) {
+            activeCategory = categoryId;
+            renderTabs();
+            renderItems();
+        }
+
+        // =====================================================================
+        // MENÚ DEL DÍA (20,00 €) — CAMBIA POR DÍA DE LA SEMANA, SOLO BEBIDA A ELEGIR
+        // =====================================================================
+        function setPreviewDay(dayIndex) {
+            previewDayIndex = dayIndex;
+            renderDailyMenuBuilder();
+        }
+
+        function setMenuDrink(drinkName) {
+            selectedMenuDrink = drinkName;
+            renderDailyMenuBuilder();
+        }
+
+        function getDailyMenuAllergens(dayMenu, drinkName) {
+            const set = new Set();
+            [dayMenu.primero, dayMenu.segundo, dayMenu.postre].forEach(dish => {
+                if (Array.isArray(dish.allergens)) {
+                    dish.allergens.forEach(a => set.add(a));
+                }
+            });
+            const drinkObj = MENU_DRINK_OPTIONS.find(d => d.name === drinkName);
+            if (drinkObj && Array.isArray(drinkObj.allergens)) {
+                drinkObj.allergens.forEach(a => set.add(a));
+            }
+            return set.size > 0 ? Array.from(set) : ['Sin alérgenos principales declarados'];
+        }
+
+        function renderDailyMenuBuilder() {
+            const builderEl = document.getElementById('daily-menu-builder');
+            const dayMenu = DAILY_MENUS_BY_DAY[previewDayIndex] || DAILY_MENUS_BY_DAY[1];
+            const isToday = previewDayIndex === todayDayIndex;
+            const totalMenusInSelection = configuredMenus.reduce((sum, m) => sum + m.qty, 0);
+            const allergens = getDailyMenuAllergens(dayMenu, selectedMenuDrink);
+
+            const daySelectorButtons = WEEKDAYS_ORDER.map(dIdx => {
+                const info = DAILY_MENUS_BY_DAY[dIdx];
+                const isSelectedDay = dIdx === previewDayIndex;
+                const isActualToday = dIdx === todayDayIndex;
+                return `
+                    <button type="button" onclick="setPreviewDay(${dIdx})" class="touch-btn px-3 py-2 rounded-xl text-xs font-semibold border flex items-center gap-1.5 ${
+                        isSelectedDay
+                            ? 'bg-[#7c1d27] text-[#faf7f2] border-[#b88b3a] shadow-sm'
+                            : 'bg-[#fffdf9] text-[#241b16] border-[#e6dcc8] hover:border-[#b88b3a]'
+                    }">
+                        <span>${info.dayName}</span>
+                        ${isActualToday ? `<span class="w-1.5 h-1.5 rounded-full ${isSelectedDay ? 'bg-[#f3d493]' : 'bg-[#7c1d27]'}" title="Hoy"></span>` : ''}
+                    </button>
+                `;
+            }).join('');
+
+            builderEl.innerHTML = `
+                <div class="bg-[#fffdf9] rounded-3xl p-5 sm:p-7 border-2 border-[#b88b3a] shadow-md">
+                    <!-- Cabecera del Menú del Día con día detectado y selector discreto de previsualización -->
+                    <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-5 mb-6 border-b border-[#e6dcc8]">
+                        <div class="space-y-2">
+                            <div class="flex flex-wrap items-center gap-2 font-ui">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#7c1d27] bg-[#faf7f2] border border-[#b88b3a] px-3.5 py-1 rounded-full">
+                                    <i class="fa-solid fa-calendar-day text-[#b88b3a]"></i>
+                                    <span>${dayMenu.dayName}</span>
+                                </span>
+                                <span class="text-xs font-medium text-[#5e4f44]">
+                                    ${isToday ? 'Día actual detectado automáticamente' : 'Previsualización de día de la semana'}
+                                </span>
+                            </div>
+
+                            <h3 class="font-serif-display text-2xl sm:text-3xl font-bold text-[#241b16]">
+                                Menú del Día · ${dayMenu.dayName}
+                            </h3>
+                            <p class="font-serif-editorial italic text-xl text-[#5e4f44]">
+                                Primero, segundo y postre fijos del día · Elige únicamente tu bebida
+                            </p>
+
+                            <!-- Selector táctil discreto para previsualizar cualquiera de los 7 días -->
+                            <div class="pt-1 font-ui">
+                                <p class="text-[11px] uppercase tracking-wider font-semibold text-[#5e4f44] mb-2">
+                                    Previsualizar otro día:
+                                </p>
+                                <div class="flex flex-wrap gap-1.5">
+                                    ${daySelectorButtons}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#faf7f2] border border-[#b88b3a] rounded-2xl px-5 py-4 text-center shrink-0">
+                            <p class="font-ui text-[11px] uppercase tracking-wider font-bold text-[#5e4f44]">Precio del menú</p>
+                            <p class="font-serif-display text-3xl sm:text-4xl font-bold text-[#7c1d27]">${formatPrice(DAILY_MENU_PRICE)}</p>
+                            <p class="font-ui text-[11px] text-[#7c1d27] font-semibold mt-0.5">Por persona</p>
+                        </div>
+                    </div>
+
+                    <!-- Platos fijos del día (Primero, Segundo y Postre) -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 font-ui">
+                        <div class="bg-[#faf7f2] rounded-2xl p-4 border border-[#e6dcc8]">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-[#b88b3a] block mb-1">
+                                Primero fijo
+                            </span>
+                            <p class="font-serif-display text-xl font-bold text-[#241b16]">
+                                ${dayMenu.primero.name}
+                            </p>
+                            <p class="text-xs text-[#5e4f44] mt-1">
+                                ${dayMenu.primero.allergens.length ? 'Alérgenos: ' + dayMenu.primero.allergens.join(', ') : 'Sin alérgenos principales'}
+                            </p>
+                        </div>
+
+                        <div class="bg-[#faf7f2] rounded-2xl p-4 border border-[#e6dcc8]">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-[#b88b3a] block mb-1">
+                                Segundo fijo
+                            </span>
+                            <p class="font-serif-display text-xl font-bold text-[#241b16]">
+                                ${dayMenu.segundo.name}
+                            </p>
+                            <p class="text-xs text-[#5e4f44] mt-1">
+                                ${dayMenu.segundo.allergens.length ? 'Alérgenos: ' + dayMenu.segundo.allergens.join(', ') : 'Sin alérgenos principales'}
+                            </p>
+                        </div>
+
+                        <div class="bg-[#faf7f2] rounded-2xl p-4 border border-[#e6dcc8]">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-[#b88b3a] block mb-1">
+                                Postre fijo
+                            </span>
+                            <p class="font-serif-display text-xl font-bold text-[#241b16]">
+                                ${dayMenu.postre.name}
+                            </p>
+                            <p class="text-xs text-[#5e4f44] mt-1">
+                                ${dayMenu.postre.allergens.length ? 'Alérgenos: ' + dayMenu.postre.allergens.join(', ') : 'Sin alérgenos principales'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Única elección del menú: Bebida -->
+                    <div class="bg-[#faf7f2] rounded-2xl p-4 sm:p-5 border border-[#e6dcc8] mb-6 font-ui">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-[#7c1d27] mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-martini-glass-citrus text-[#b88b3a]"></i>
+                            <span>Elige tu bebida incluida en el menú</span>
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                            ${MENU_DRINK_OPTIONS.map(drink => {
+                                const active = selectedMenuDrink === drink.name;
+                                return `
+                                    <button type="button" onclick="setMenuDrink('${drink.name.replace(/'/g, "\\'")}')" class="touch-btn text-left px-3.5 py-3 rounded-xl border text-sm font-semibold flex items-center justify-between gap-2 ${
+                                        active
+                                            ? 'bg-[#7c1d27] text-[#faf7f2] border-[#b88b3a] shadow-sm'
+                                            : 'bg-[#fffdf9] text-[#241b16] border-[#e6dcc8] hover:border-[#b88b3a]'
+                                    }">
+                                        <span>${drink.name}</span>
+                                        <i class="fa-solid ${active ? 'fa-circle-check text-[#f3d493]' : 'fa-circle text-[#e6dcc8]'} text-xs shrink-0"></i>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Resumen y botón para añadir el menú del día -->
+                    <div class="bg-[#faf7f2] rounded-2xl p-4 sm:p-5 border border-[#e6dcc8] flex flex-col lg:flex-row lg:items-center justify-between gap-4 font-ui">
+                        <div class="space-y-1">
+                            <p class="text-xs font-bold uppercase tracking-wider text-[#7c1d27]">
+                                Menú del ${dayMenu.dayName} seleccionado:
+                            </p>
+                            <p class="text-sm text-[#241b16]">
+                                <strong>1º:</strong> ${dayMenu.primero.name} ·
+                                <strong>2º:</strong> ${dayMenu.segundo.name} ·
+                                <strong>Postre:</strong> ${dayMenu.postre.name} ·
+                                <strong>Bebida:</strong> ${selectedMenuDrink}
+                            </p>
+                            <p class="text-xs text-[#5e4f44]">
+                                <strong>Alérgenos:</strong> ${allergens.join(', ')}
+                            </p>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-3 shrink-0">
+                            <button type="button" onclick="addDailyMenuToSelection()" class="touch-btn bg-[#7c1d27] hover:bg-[#5e131b] text-[#faf7f2] font-bold text-sm px-6 py-4 rounded-2xl border border-[#b88b3a] flex items-center justify-center gap-2 shadow-md">
+                                <i class="fa-solid fa-plus-circle text-[#f3d493]"></i>
+                                <span>Añadir Menú (${formatPrice(DAILY_MENU_PRICE)})</span>
+                            </button>
+                            ${totalMenusInSelection > 0 ? `
+                                <button type="button" onclick="openSummaryModal()" class="touch-btn bg-[#fffdf9] hover:bg-[#efe7d6] text-[#7c1d27] font-bold text-sm px-4 py-4 rounded-2xl border border-[#b88b3a] flex items-center gap-2">
+                                    <i class="fa-solid fa-receipt"></i>
+                                    <span>${totalMenusInSelection} en selección</span>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addDailyMenuToSelection() {
+            const dayMenu = DAILY_MENUS_BY_DAY[previewDayIndex] || DAILY_MENUS_BY_DAY[1];
+            const signature = `${dayMenu.dayName}|${dayMenu.primero.name}|${dayMenu.segundo.name}|${dayMenu.postre.name}|${selectedMenuDrink}`;
+            const existing = configuredMenus.find(m => m.signature === signature);
+
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                configuredMenus.push({
+                    uid: 'md-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+                    signature,
+                    dayName: dayMenu.dayName,
+                    primero: dayMenu.primero.name,
+                    segundo: dayMenu.segundo.name,
+                    postre: dayMenu.postre.name,
+                    bebida: selectedMenuDrink,
+                    price: DAILY_MENU_PRICE,
+                    allergens: getDailyMenuAllergens(dayMenu, selectedMenuDrink),
+                    qty: 1
+                });
+            }
+
+            renderTabs();
+            renderDailyMenuBuilder();
+            updateSelectionBar();
+
+            const summaryModal = document.getElementById('summary-modal');
+            if (!summaryModal.classList.contains('hidden')) {
+                renderSummaryModalItems();
+            }
+        }
+
+        function changeConfiguredMenuQty(uid, delta) {
+            const idx = configuredMenus.findIndex(m => m.uid === uid);
+            if (idx === -1) return;
+
+            const nextQty = configuredMenus[idx].qty + delta;
+            if (nextQty <= 0) {
+                configuredMenus.splice(idx, 1);
+            } else {
+                configuredMenus[idx].qty = nextQty;
+            }
+
+            renderTabs();
+            if (activeCategory === 'menu-dia') {
+                renderDailyMenuBuilder();
+            }
+            updateSelectionBar();
+            renderSummaryModalItems();
+        }
+
+        // =====================================================================
+        // RENDERIZADO DE TARJETAS DE CARTA
+        // =====================================================================
+        function renderItems() {
+            const container = document.getElementById('items-container');
+            const builderEl = document.getElementById('daily-menu-builder');
+            const titleEl = document.getElementById('current-category-title');
+            const countEl = document.getElementById('items-count');
+
+            const catObj = CATEGORIES.find(c => c.id === activeCategory);
+            titleEl.textContent = catObj ? catObj.name : '';
+
+            if (activeCategory === 'menu-dia') {
+                builderEl.classList.remove('hidden');
+                container.classList.add('hidden');
+                container.innerHTML = '';
+                countEl.textContent = `Hoy: ${DAILY_MENUS_BY_DAY[todayDayIndex].dayName} · ${formatPrice(DAILY_MENU_PRICE)}`;
+                renderDailyMenuBuilder();
+                return;
+            }
+
+            builderEl.classList.add('hidden');
+            builderEl.innerHTML = '';
+            container.classList.remove('hidden');
+
+            const items = MENU_ITEMS.filter(item => item.category === activeCategory);
+            countEl.textContent = `${items.length} ${items.length === 1 ? 'opción' : 'opciones'}`;
+
+            container.innerHTML = '';
+
+            items.forEach(item => {
+                const qty = selection[item.id] || 0;
+                const card = document.createElement('article');
+                card.className = [
+                    'bg-[#fffdf9] rounded-2xl p-5 sm:p-6 border flex flex-col justify-between transition-all shadow-sm',
+                    qty > 0 ? 'border-[#b88b3a] ring-1 ring-[#b88b3a]/40' : 'border-[#e6dcc8] hover:border-[#b88b3a]'
+                ].join(' ');
+
+                card.innerHTML = `
+                    <div onclick="openDetailModal('${item.id}')" class="cursor-pointer group">
+                        <div class="flex items-baseline justify-between gap-3 pb-2.5 mb-2.5 border-b border-dotted border-[#b88b3a]">
+                            <h3 class="font-serif-display text-2xl font-bold text-[#241b16] group-hover:text-[#7c1d27] transition-colors">
+                                ${item.name}
+                            </h3>
+                            <span class="font-serif-display text-2xl font-bold text-[#7c1d27] whitespace-nowrap">
+                                ${formatPrice(item.price)}
+                            </span>
+                        </div>
+                        <p class="font-serif-editorial text-xl text-[#5e4f44] leading-snug mb-3">
+                            ${item.description}
+                        </p>
+                        <p class="font-ui text-xs text-[#7c1d27] font-medium mb-4 inline-flex items-center gap-1.5">
+                            <i class="fa-regular fa-eye text-[#b88b3a]"></i>
+                            <span>Ver ingredientes y alérgenos</span>
+                        </p>
+                    </div>
+
+                    <div class="pt-3 border-t border-[#faf7f2] flex items-center justify-between gap-3 font-ui">
+                        <span class="text-xs text-[#5e4f44] truncate">
+                            ${item.allergens[0] === 'Sin alérgenos principales declarados' ? 'Sin alérgenos declarados' : 'Alérgenos: ' + item.allergens.join(', ')}
+                        </span>
+                        <div id="card-controls-${item.id}" class="shrink-0">
+                            ${renderCardControls(item.id, qty)}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function renderCardControls(itemId, qty) {
+            if (qty <= 0) {
+                return `
+                    <button type="button" onclick="event.stopPropagation(); changeQuantity('${itemId}', 1)" class="touch-btn bg-[#7c1d27] hover:bg-[#5e131b] text-[#faf7f2] font-semibold text-sm px-4 py-2.5 rounded-xl border border-[#b88b3a] flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-plus text-xs text-[#f3d493]"></i>
+                        <span>Añadir</span>
+                    </button>
+                `;
+            }
+
+            return `
+                <div class="flex items-center gap-1.5 bg-[#faf7f2] border border-[#b88b3a] rounded-xl p-1">
+                    <button type="button" aria-label="Restar unidad" onclick="event.stopPropagation(); changeQuantity('${itemId}', -1)" class="touch-btn w-9 h-9 rounded-lg bg-[#fffdf9] hover:bg-[#7c1d27] hover:text-[#faf7f2] text-[#7c1d27] border border-[#e6dcc8] font-bold flex items-center justify-center">
+                        <i class="fa-solid fa-minus text-xs"></i>
+                    </button>
+                    <span class="w-7 text-center font-bold text-sm text-[#241b16]">${qty}</span>
+                    <button type="button" aria-label="Sumar unidad" onclick="event.stopPropagation(); changeQuantity('${itemId}', 1)" class="touch-btn w-9 h-9 rounded-lg bg-[#7c1d27] hover:bg-[#5e131b] text-[#faf7f2] font-bold flex items-center justify-center">
+                        <i class="fa-solid fa-plus text-xs text-[#f3d493]"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        // =====================================================================
+        // CANTIDADES, SELECCIÓN Y BARRA INFERIOR
+        // =====================================================================
+        function changeQuantity(itemId, delta) {
+            const nextQty = (selection[itemId] || 0) + delta;
+            if (nextQty <= 0) {
+                delete selection[itemId];
+            } else {
+                selection[itemId] = nextQty;
+            }
+
+            renderTabs();
+            renderItems();
+            updateSelectionBar();
+
+            if (currentModalItemId === itemId) {
+                renderModalActionArea(itemId);
+            }
+
+            const summaryModal = document.getElementById('summary-modal');
+            if (!summaryModal.classList.contains('hidden')) {
+                renderSummaryModalItems();
+            }
+        }
+
+        function clearSelection() {
+            Object.keys(selection).forEach(key => delete selection[key]);
+            configuredMenus.length = 0;
+            renderTabs();
+            if (activeCategory === 'menu-dia') {
+                renderDailyMenuBuilder();
+            } else {
+                renderItems();
+            }
+            updateSelectionBar();
+            renderSummaryModalItems();
+        }
+
+        function updateSelectionBar() {
+            const countEl = document.getElementById('bar-count');
+            const totalEl = document.getElementById('bar-total');
+
+            let totalUnits = 0;
+            let totalAmount = 0;
+
+            for (const [id, qty] of Object.entries(selection)) {
+                const item = MENU_ITEMS.find(m => m.id === id);
+                if (item && qty > 0) {
+                    totalUnits += qty;
+                    totalAmount += item.price * qty;
+                }
+            }
+
+            for (const menu of configuredMenus) {
+                if (menu.qty > 0) {
+                    totalUnits += menu.qty;
+                    totalAmount += menu.price * menu.qty;
+                }
+            }
+
+            countEl.textContent = `${totalUnits} ${totalUnits === 1 ? 'artículo' : 'artículos'}`;
+            totalEl.textContent = formatPrice(totalAmount);
+        }
+
+        // =====================================================================
+        // MODAL DE DETALLE
+        // =====================================================================
+        function openDetailModal(itemId) {
+            const item = MENU_ITEMS.find(m => m.id === itemId);
+            if (!item) return;
+
+            currentModalItemId = itemId;
+            const catObj = CATEGORIES.find(c => c.id === item.category);
+
+            document.getElementById('modal-img').src = item.image;
+            document.getElementById('modal-img').alt = item.name;
+            document.getElementById('modal-category-badge').textContent = catObj ? catObj.name : '';
+            document.getElementById('modal-title').textContent = item.name;
+            document.getElementById('modal-price').textContent = formatPrice(item.price);
+            document.getElementById('modal-description').textContent = item.description;
+            document.getElementById('modal-ingredients').textContent = item.ingredients;
+
+            const allergensEl = document.getElementById('modal-allergens');
+            allergensEl.innerHTML = item.allergens.map(al => `
+                <span class="px-3 py-1.5 rounded-full text-xs font-semibold bg-[#faf7f2] text-[#241b16] border border-[#b88b3a]/60">
+                    ${al}
+                </span>
+            `).join('');
+
+            renderModalActionArea(itemId);
+
+            const modal = document.getElementById('detail-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function renderModalActionArea(itemId) {
+            const area = document.getElementById('modal-action-area');
+            const qty = selection[itemId] || 0;
+
+            if (qty <= 0) {
+                area.innerHTML = `
+                    <button type="button" onclick="changeQuantity('${itemId}', 1)" class="touch-btn w-full py-4 px-6 rounded-2xl bg-[#7c1d27] hover:bg-[#5e131b] text-[#faf7f2] font-bold text-base border border-[#b88b3a] flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-plus-circle text-[#f3d493]"></i>
+                        <span>Añadir a la selección</span>
+                    </button>
+                `;
+            } else {
+                area.innerHTML = `
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="text-sm font-semibold text-[#5e4f44]">En tu selección:</span>
+                        <div class="flex items-center gap-3 bg-[#faf7f2] border border-[#b88b3a] rounded-2xl p-1.5">
+                            <button type="button" aria-label="Quitar uno" onclick="changeQuantity('${itemId}', -1)" class="touch-btn w-11 h-11 rounded-xl bg-[#fffdf9] hover:bg-[#7c1d27] hover:text-[#faf7f2] text-[#7c1d27] border border-[#e6dcc8] font-bold flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <span class="w-8 text-center font-bold text-lg text-[#241b16]">${qty}</span>
+                            <button type="button" aria-label="Añadir uno" onclick="changeQuantity('${itemId}', 1)" class="touch-btn w-11 h-11 rounded-xl bg-[#7c1d27] hover:bg-[#5e131b] text-[#faf7f2] font-bold flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-plus text-[#f3d493]"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function closeDetailModal() {
+            currentModalItemId = null;
+            const modal = document.getElementById('detail-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // =====================================================================
+        // MODAL DE RESUMEN
+        // =====================================================================
+        function openSummaryModal() {
+            renderSummaryModalItems();
+            const modal = document.getElementById('summary-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeSummaryModal() {
+            const modal = document.getElementById('summary-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function renderSummaryModalItems() {
+            const listEl = document.getElementById('summary-items-list');
+            const totalEl = document.getElementById('summary-total');
+
+            const entries = Object.entries(selection).filter(([, qty]) => qty > 0);
+            const activeMenus = configuredMenus.filter(m => m.qty > 0);
+
+            if (entries.length === 0 && activeMenus.length === 0) {
+                listEl.innerHTML = `
+                    <div class="text-center py-10">
+                        <i class="fa-solid fa-utensils text-3xl text-[#b88b3a] mb-3"></i>
+                        <p class="font-serif-editorial italic text-xl text-[#5e4f44]">Todavía no has añadido platos, menús, bebidas ni vinos.</p>
+                    </div>
+                `;
+                totalEl.textContent = formatPrice(0);
+                return;
+            }
+
+            let grandTotal = 0;
+            const htmlParts = [];
+
+            activeMenus.forEach(menu => {
+                const subtotal = menu.price * menu.qty;
+                grandTotal += subtotal;
+                htmlParts.push(`
+                    <div class="p-3.5 rounded-2xl bg-[#faf7f2] border border-[#b88b3a] space-y-2">
+                        <div class="flex items-center justify-between gap-3">
+                            <div class="min-w-0 flex-1">
+                                <h4 class="font-serif-display text-lg font-bold text-[#7c1d27] truncate">Menú del Día · ${menu.dayName}</h4>
+                                <p class="text-xs text-[#5e4f44]">${formatPrice(menu.price)} / menú</p>
+                            </div>
+
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="changeConfiguredMenuQty('${menu.uid}', -1)" class="touch-btn w-9 h-9 rounded-lg bg-[#fffdf9] border border-[#e6dcc8] text-[#7c1d27] font-bold flex items-center justify-center">
+                                    <i class="fa-solid fa-minus text-xs"></i>
+                                </button>
+                                <span class="w-6 text-center font-bold text-sm">${menu.qty}</span>
+                                <button type="button" onclick="changeConfiguredMenuQty('${menu.uid}', 1)" class="touch-btn w-9 h-9 rounded-lg bg-[#7c1d27] text-[#faf7f2] font-bold flex items-center justify-center">
+                                    <i class="fa-solid fa-plus text-xs text-[#f3d493]"></i>
+                                </button>
+                            </div>
+
+                            <div class="font-serif-display text-lg font-bold text-[#7c1d27] w-20 text-right">
+                                ${formatPrice(subtotal)}
+                            </div>
+                        </div>
+                        <p class="text-xs text-[#241b16] leading-snug border-t border-[#e6dcc8] pt-2">
+                            1º: <strong>${menu.primero}</strong> · 2º: <strong>${menu.segundo}</strong> · Postre: <strong>${menu.postre}</strong> · Bebida: <strong>${menu.bebida}</strong>
+                        </p>
+                    </div>
+                `);
+            });
+
+            entries.forEach(([id, qty]) => {
+                const item = MENU_ITEMS.find(m => m.id === id);
+                if (!item) return;
+                const subtotal = item.price * qty;
+                grandTotal += subtotal;
+
+                htmlParts.push(`
+                    <div class="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-[#faf7f2] border border-[#e6dcc8]">
+                        <div class="min-w-0 flex-1">
+                            <h4 class="font-serif-display text-lg font-bold text-[#241b16] truncate">${item.name}</h4>
+                            <p class="text-xs text-[#5e4f44]">${formatPrice(item.price)} / ud.</p>
+                        </div>
+
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" onclick="changeQuantity('${item.id}', -1)" class="touch-btn w-9 h-9 rounded-lg bg-[#fffdf9] border border-[#e6dcc8] text-[#7c1d27] font-bold flex items-center justify-center">
+                                <i class="fa-solid fa-minus text-xs"></i>
+                            </button>
+                            <span class="w-6 text-center font-bold text-sm">${qty}</span>
+                            <button type="button" onclick="changeQuantity('${item.id}', 1)" class="touch-btn w-9 h-9 rounded-lg bg-[#7c1d27] text-[#faf7f2] font-bold flex items-center justify-center">
+                                <i class="fa-solid fa-plus text-xs text-[#f3d493]"></i>
+                            </button>
+                        </div>
+
+                        <div class="font-serif-display text-lg font-bold text-[#7c1d27] w-20 text-right">
+                            ${formatPrice(subtotal)}
+                        </div>
+                    </div>
+                `);
+            });
+
+            listEl.innerHTML = htmlParts.join('');
+            totalEl.textContent = formatPrice(grandTotal);
+        }
+
+        // =====================================================================
+        // FORMATO DE PRECIOS EN EUROS
+        // =====================================================================
+        function formatPrice(amount) {
+            return amount.toFixed(2).replace('.', ',') + ' €';
+        }
+    </script>
+</body>
+</html>
